@@ -5,8 +5,7 @@ using teste_pratico.Services.Interfaces;
 namespace teste_pratico.Controllers
 {
     /// <summary>
-    /// Controller para gerenciamento de clientes
-    /// Implementa os 5 endpoints CRUD conforme especificação
+    /// Gerenciamento de Clientes
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
@@ -25,11 +24,10 @@ namespace teste_pratico.Controllers
         }
 
         /// <summary>
-        /// Lista todos os clientes cadastrados
+        /// 📋 Listar todos os clientes
         /// </summary>
-        /// <returns>Lista de clientes</returns>
-        /// <response code="200">Lista de clientes retornada com sucesso</response>
-        /// <response code="500">Erro interno do servidor</response>
+        /// <returns>Lista com todos os clientes cadastrados</returns>
+        /// <response code="200">Lista retornada com sucesso</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<CustomerResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -45,14 +43,12 @@ namespace teste_pratico.Controllers
         }
 
         /// <summary>
-        /// Obtém um cliente específico pelo ID
+        /// 🔍 Buscar cliente por ID
         /// </summary>
-        /// <param name="id">ID do cliente</param>
-        /// <returns>Dados do cliente</returns>
+        /// <param name="id">ID do cliente para buscar</param>
+        /// <returns>Dados completos do cliente</returns>
         /// <response code="200">Cliente encontrado</response>
-        /// <response code="400">ID inválido</response>
         /// <response code="404">Cliente não encontrado</response>
-        /// <response code="500">Erro interno do servidor</response>
         [HttpGet("{id:long}")]
         [ProducesResponseType(typeof(CustomerResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -76,9 +72,11 @@ namespace teste_pratico.Controllers
         }
 
         /// <summary>
-        /// Cadastra um novo cliente
-        /// Antes de salvar, consulta o ViaCEP para preencher o endereço
+        /// ➕ Criar novo cliente
         /// </summary>
+        /// <remarks>
+        /// O endereço é preenchido automaticamente consultando o ViaCEP pelo CEP informado.
+        /// </remarks>
         /// <param name="customerRequest">Dados do cliente a ser criado</param>
         /// <returns>Cliente criado com endereço preenchido</returns>
         /// <response code="201">Cliente criado com sucesso</response>
@@ -109,16 +107,17 @@ namespace teste_pratico.Controllers
         }
 
         /// <summary>
-        /// Atualiza os dados de um cliente existente
-        /// Antes de salvar, consulta o ViaCEP para atualizar o endereço
+        /// ✏️ Atualizar cliente existente
         /// </summary>
+        /// <remarks>
+        /// Se o CEP for alterado, o endereço será atualizado automaticamente via ViaCEP.
+        /// </remarks>
         /// <param name="id">ID do cliente a ser atualizado</param>
         /// <param name="customerRequest">Novos dados do cliente</param>
-        /// <returns>Cliente atualizado</returns>
+        /// <returns>Cliente com dados atualizados</returns>
         /// <response code="200">Cliente atualizado com sucesso</response>
         /// <response code="400">Dados inválidos ou CEP não encontrado</response>
         /// <response code="404">Cliente não encontrado</response>
-        /// <response code="500">Erro interno do servidor</response>
         [HttpPut("{id:long}")]
         [ProducesResponseType(typeof(CustomerResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -142,14 +141,12 @@ namespace teste_pratico.Controllers
         }
 
         /// <summary>
-        /// Remove um cliente pelo ID
+        /// 🗑️ Excluir cliente
         /// </summary>
-        /// <param name="id">ID do cliente a ser removido</param>
-        /// <returns>Confirmação da remoção</returns>
-        /// <response code="204">Cliente removido com sucesso</response>
-        /// <response code="400">ID inválido</response>
+        /// <param name="id">ID do cliente a ser excluído</param>
+        /// <returns>Confirmação da exclusão</returns>
+        /// <response code="204">Cliente excluído com sucesso</response>
         /// <response code="404">Cliente não encontrado</response>
-        /// <response code="500">Erro interno do servidor</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

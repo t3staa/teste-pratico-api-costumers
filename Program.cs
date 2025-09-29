@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using teste_pratico.Data;
 using teste_pratico.Repositories.Interfaces;
 using teste_pratico.Repositories.Implementations;
@@ -70,40 +71,34 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "API para gerenciamento de clientes com integração ViaCEP"
     });
+
+    // Incluir comentários XML
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+    {
+        c.IncludeXmlComments(xmlPath);
+    }
 });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-// Debug logging para diagnóstico
-app.Logger.LogInformation("Starting application in {Environment} mode", app.Environment.EnvironmentName);
-
 // IMPORTANTE: Swagger deve vir ANTES do ExceptionHandler para não ser interceptado
 if (app.Environment.IsDevelopment())
 {
-    app.Logger.LogInformation("Configuring Swagger for Development environment");
-
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Customer Management API V1");
-        c.RoutePrefix = "swagger"; // Swagger disponível em /swagger
+        c.RoutePrefix = string.Empty; // Swagger disponível na raiz
         c.DisplayRequestDuration();
         c.EnableDeepLinking();
         c.EnableFilter();
         c.ShowExtensions();
     });
-
-    app.Logger.LogInformation("Swagger configured at /swagger/index.html");
 }
-
-// Middleware de debug para ver todas as requisições
-app.Use(async (context, next) =>
-{
-    app.Logger.LogDebug("Request Path: {Path}, Method: {Method}", context.Request.Path, context.Request.Method);
-    await next();
-});
 
 // Global exception handling middleware (DEPOIS do Swagger)
 app.UseGlobalExceptionHandler();

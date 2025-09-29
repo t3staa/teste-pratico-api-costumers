@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is an ASP.NET Core 7.0 Web API project for customer management. It's a technical assessment project that requires implementing a complete customer management API with address lookup via the ViaCEP external service.
+This is an ASP.NET Core 8.0 Web API project for customer management. It's a technical assessment project that implements a complete customer management API with address lookup via the ViaCEP external service.
 
 ## Development Commands
 
@@ -13,6 +13,7 @@ This is an ASP.NET Core 7.0 Web API project for customer management. It's a tech
 dotnet build
 
 # Run the application (defaults to https://localhost:7257 or http://localhost:5005)
+# IMPORTANT: Always open the .sln file in Visual Studio for best experience
 dotnet run
 
 # Run in watch mode for development

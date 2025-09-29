@@ -24,27 +24,31 @@ git clone [url-do-repositorio]
 cd teste-pratico-api-costumers
 ```
 
-### 2. Restaure as dependências
+### 2. Abra no Visual Studio
+- **Abra o arquivo:** `teste-pratico-api-costumers.sln`
+- **Importante:** Sempre abra o arquivo `.sln`, não o `.csproj`
+
+### 3. Execute o projeto
+- Pressione `F5` ou clique no botão `▶️ Run`
+- **O navegador abrirá automaticamente** no Swagger!
+
+### 4. Acesso ao Swagger UI
+- **Automático:** O navegador abre sozinho após executar
+- **Manual:**
+  - **HTTPS:** https://localhost:7257/
+  - **HTTP:** http://localhost:5005/
+
+### Executando via linha de comando (opcional)
 ```bash
+# Restaurar dependências
 dotnet restore
-```
 
-### 3. Compile o projeto
-```bash
+# Compilar projeto
 dotnet build
-```
 
-### 4. Execute a aplicação
-```bash
+# Executar aplicação
 dotnet run
 ```
-
-### 5. Acesse o Swagger UI
-
-Após executar o projeto, o Swagger **NÃO** abrirá automaticamente no navegador. Acesse manualmente:
-
-- **HTTP:** http://localhost:5005/swagger/index.html
-- **HTTPS:** https://localhost:7257/swagger/index.html
 
 ## 💾 Banco de Dados
 
@@ -59,6 +63,10 @@ Este projeto utiliza **Entity Framework Core com InMemory Database**.
 ## 📡 Endpoints da API
 
 ### Base URL
+```
+https://localhost:7257/api/customers
+```
+ou
 ```
 http://localhost:5005/api/customers
 ```
@@ -125,13 +133,13 @@ Remove um cliente.
 
 ```bash
 # Listar todos os clientes
-curl -X GET "http://localhost:5005/api/customers"
+curl -X GET "https://localhost:7257/api/customers"
 
 # Buscar cliente por ID
-curl -X GET "http://localhost:5005/api/customers/1"
+curl -X GET "https://localhost:7257/api/customers/1"
 
 # Criar novo cliente
-curl -X POST "http://localhost:5005/api/customers" \
+curl -X POST "https://localhost:7257/api/customers" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Teste Silva",
@@ -140,7 +148,7 @@ curl -X POST "http://localhost:5005/api/customers" \
   }'
 
 # Atualizar cliente
-curl -X PUT "http://localhost:5005/api/customers/1" \
+curl -X PUT "https://localhost:7257/api/customers/1" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "João Silva Atualizado",
@@ -149,7 +157,7 @@ curl -X PUT "http://localhost:5005/api/customers/1" \
   }'
 
 # Deletar cliente
-curl -X DELETE "http://localhost:5005/api/customers/1"
+curl -X DELETE "https://localhost:7257/api/customers/1"
 ```
 
 ## 🛠️ Estrutura do Projeto
