@@ -1,68 +1,190 @@
-![Logo da empresa](https://custec.com.br/wp-content/uploads/2018/09/Logo-custec-80x100-e1538002492448.png)
+# API de Gerenciamento de Clientes
 
-# Teste Prático – API de Gerenciamento de Clientes
+API RESTful para gerenciamento de clientes com integração automática com a API ViaCEP para busca de endereços por CEP.
 
-Este repositório contém o template para o desenvolvimento de uma Web API em ASP NET Core. O objetivo é avaliar sua capacidade de projetar, implementar e documentar uma solução completa seguindo boas práticas de arquitetura, padrões de projeto e tratamento de erros.
+## 🚀 Tecnologias Utilizadas
+
+- **.NET 8.0** - Framework principal
+- **ASP.NET Core Web API** - Para construção da API RESTful
+- **Entity Framework Core 8.0.8** - ORM para acesso a dados
+- **InMemory Database** - Banco de dados em memória para desenvolvimento/testes
+- **Swagger/OpenAPI** - Documentação interativa da API
+- **ViaCEP API** - Integração para busca automática de endereços
+
+## 📦 Pré-requisitos
+
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- Editor de código (Visual Studio 2022, VS Code, Rider, etc.)
+
+## 🔧 Como Executar o Projeto
+
+### 1. Clone o repositório
+```bash
+git clone [url-do-repositorio]
+cd teste-pratico-api-costumers
+```
+
+### 2. Restaure as dependências
+```bash
+dotnet restore
+```
+
+### 3. Compile o projeto
+```bash
+dotnet build
+```
+
+### 4. Execute a aplicação
+```bash
+dotnet run
+```
+
+### 5. Acesse o Swagger UI
+
+Após executar o projeto, o Swagger **NÃO** abrirá automaticamente no navegador. Acesse manualmente:
+
+- **HTTP:** http://localhost:5005/swagger/index.html
+- **HTTPS:** https://localhost:7257/swagger/index.html
+
+## 💾 Banco de Dados
+
+Este projeto utiliza **Entity Framework Core com InMemory Database**.
+
+### Características:
+- **Temporário:** Os dados são perdidos quando a aplicação é encerrada
+- **Ideal para Desenvolvimento:** Não requer instalação de banco de dados
+- **Performance:** Extremamente rápido para operações CRUD
+- **Dados Iniciais:** Inclui um cliente de exemplo (João Silva)
+
+## 📡 Endpoints da API
+
+### Base URL
+```
+http://localhost:5005/api/customers
+```
+
+### 1. **GET** `/api/customers`
+Lista todos os clientes cadastrados.
+
+**Response:** `200 OK`
+```json
+[
+  {
+    "id": 1,
+    "name": "João Silva",
+    "email": "joao.silva@example.com",
+    "cep": "01310100",
+    "street": "Avenida Paulista",
+    "city": "São Paulo",
+    "state": "SP",
+    "createdAt": "2025-01-28T10:00:00Z",
+    "updatedAt": null
+  }
+]
+```
+
+### 2. **GET** `/api/customers/{id}`
+Busca um cliente específico por ID.
+
+**Response:** `200 OK` ou `404 Not Found`
+
+### 3. **POST** `/api/customers`
+Cria um novo cliente. O endereço é buscado automaticamente via ViaCEP.
+
+**Request Body:**
+```json
+{
+  "name": "Maria Santos",
+  "email": "maria.santos@example.com",
+  "cep": "01001000"
+}
+```
+
+**Response:** `201 Created`
+
+### 4. **PUT** `/api/customers/{id}`
+Atualiza um cliente existente.
+
+**Request Body:**
+```json
+{
+  "name": "Maria Santos Silva",
+  "email": "maria.silva@example.com",
+  "cep": "20040020"
+}
+```
+
+**Response:** `200 OK` ou `404 Not Found`
+
+### 5. **DELETE** `/api/customers/{id}`
+Remove um cliente.
+
+**Response:** `204 No Content` ou `404 Not Found`
+
+## 🧪 Exemplos de Requisições (cURL)
+
+```bash
+# Listar todos os clientes
+curl -X GET "http://localhost:5005/api/customers"
+
+# Buscar cliente por ID
+curl -X GET "http://localhost:5005/api/customers/1"
+
+# Criar novo cliente
+curl -X POST "http://localhost:5005/api/customers" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Teste Silva",
+    "email": "teste@example.com",
+    "cep": "01310100"
+  }'
+
+# Atualizar cliente
+curl -X PUT "http://localhost:5005/api/customers/1" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "João Silva Atualizado",
+    "email": "joao.novo@example.com",
+    "cep": "20040020"
+  }'
+
+# Deletar cliente
+curl -X DELETE "http://localhost:5005/api/customers/1"
+```
+
+## 🛠️ Estrutura do Projeto
+
+```
+teste-pratico-api-costumers/
+├── Controllers/          # Endpoints da API
+├── Models/              # Entidades e DTOs
+├── Data/                # Contexto do EF Core
+├── Repositories/        # Camada de acesso a dados
+├── Services/            # Lógica de negócio e integração ViaCEP
+├── Middleware/          # Tratamento global de erros
+└── Program.cs           # Configuração da aplicação
+```
+
+## ✅ Requisitos Implementados
+
+- ✅ ASP.NET Core Web API (.NET 8.0)
+- ✅ Entity Framework Core com InMemory Database
+- ✅ Repository + Service Pattern com injeção de dependência
+- ✅ Operações assíncronas (async/await)
+- ✅ HttpClient via IHttpClientFactory para ViaCEP
+- ✅ Middleware de tratamento global de erros
+- ✅ Documentação Swagger/OpenAPI
+- ✅ Validação de dados de entrada
+- ✅ Integração automática com ViaCEP
+
+## ⚠️ Tratamento de Erros
+
+A API retorna respostas padronizadas:
+- **400 Bad Request**: Dados inválidos, CEP não encontrado
+- **404 Not Found**: Cliente não encontrado
+- **408 Request Timeout**: Timeout na chamada do ViaCEP
+- **500 Internal Server Error**: Erro inesperado no servidor
 
 ---
 
-## Como Submeter o Projeto
-
-1. Faça um fork deste repositório na sua conta do GitHub.  
-
-2. Após concluir sua implementação, conceda acesso de leitura ao fork para os e-mails dos revisores:  
-   - msantos@custec.com.br 
-   - jcoturi@custec.com.br  
-
-3. Certifique-se de que o repositório forkado esteja público ou, se privado, que os revisores tenham permissão de leitura.  
-
----
-
-## Teste
-
-### Cenário
-
-Você foi contratado para desenvolver uma API de gerenciamento de clientes. Cada cliente tem nome, e-mail e endereço. Em vez de solicitar todos os dados de endereço manualmente, sua API deve usar um serviço externo para preencher o logradouro, cidade e estado a partir do CEP informado.
-
-### Requisitos Funcionais
-
-- Criar um projeto ASP NET Core Web API (.NET 2.1 ou superior).  
-- Implementar os seguintes endpoints no `CustomersController`:  
-  - `GET /api/customers` – listar todos os clientes  
-  - `GET /api/customers/{id}` – obter cliente por ID  
-  - `POST /api/customers` – cadastrar novo cliente  
-  - `PUT /api/customers/{id}` – atualizar cliente existente  
-  - `DELETE /api/customers/{id}` – remover cliente  
-- Definir a entidade `Customer` com estes campos:  
-  - `Id` (long)  
-  - `Name` (string, obrigatório)  
-  - `Email` (string, obrigatório, formato válido)  
-  - `Cep` (string, obrigatório, apenas dígitos)  
-  - `Street` (string)  
-  - `City` (string)  
-  - `State` (string)  
-- Ao cadastrar ou atualizar (`POST`/`PUT`), antes de salvar:  
-  - Chamar o serviço externo ViaCEP: `https://viacep.com.br/ws/{cep}/json/`  
-  - Se o CEP for válido, preencher `Street`, `City` e `State` com os dados retornados  
-  - Em caso de CEP inválido ou erro de serviço, retornar 400 Bad Request com mensagem apropriada  
-
-### Requisitos Técnicos
-
-- Usar Entity Framework Core com banco em memória (InMemory) ou SQL Server local.  
-- Implementar Repository + Service Pattern com injeção de dependência.  
-- Todas as operações de banco e chamadas HTTP externas devem ser assíncronas (`async`/`await`).  
-- Configurar `HttpClient` para consumir o ViaCEP via `IHttpClientFactory`.  
-- Tratar erros globais via middleware (por exemplo, `ExceptionHandlerMiddleware`).  
-
-### Entregáveis
-
-- Repositório GitHub (público ou privado com acesso de leitura concedido).  
-- Este README contendo:  
-  - Instruções para clonar, restaurar pacotes e executar a API  
-  - Exemplos de requisições (cURL ou Postman Collection)  
-- Código-fonte organizado com commits claros e frequentes.  
-- Documentação da API em Swagger/OpenAPI (opcional).  
-
----
-
-Boa implementação e bons commits!
+**Teste Prático - API de Gerenciamento de Clientes**
